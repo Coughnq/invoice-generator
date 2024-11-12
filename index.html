@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="invoice-generator">
+            <header>
+                <h1>
+                    <i class="fas fa-file-invoice-dollar"></i> 
+                    Invoice Generator
+                </h1>
+            </header>
+
+            <form id="invoice-form" novalidate>
+                <!-- Tabbed Navigation -->
+                <div class="tab-navigation">
+                    <button type="button" class="tab-btn active" data-tab="business" aria-label="Business Information">Business Info</button>
+                    <button type="button" class="tab-btn" data-tab="client">Client Info</button>
+                    <button type="button" class="tab-btn" data-tab="invoice">Invoice Details</button>
+                    <button type="button" class="tab-btn" data-tab="items">Items</button>
+                </div>
+
+                <!-- Business Information Tab -->
+                <div class="tab-content active" id="business-tab">
+                    <section>
+                        <h2>Your Business Information</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="logo-upload">Company Logo</label>
+                                <input type="file" id="logo-upload" accept="image/*">
+                                <div class="file-preview">
+                                    <img alt="" style="display: none;">
+                                    <button type="button" class="remove-logo" style="display: none;">×</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="business-name">Business Name *</label>
+                                <input type="text" id="business-name" required autocomplete="organization">
+                            </div>
+                            <div class="form-group">
+                                <label for="business-address">Business Address *</label>
+                                <input type="text" id="business-address" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="business-phone">Business Phone *</label>
+                                <input type="tel" id="business-phone" required autocomplete="tel">
+                            </div>
+                            <div class="form-group">
+                                <label for="business-email">Business Email *</label>
+                                <input type="email" id="business-email" required autocomplete="email">
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Client Information Tab -->
+                <div class="tab-content" id="client-tab">
+                    <section>
+                        <h2>Client Information</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="client-name">Client Name *</label>
+                                <input type="text" id="client-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-address">Client Address *</label>
+                                <input type="text" id="client-address" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-phone">Client Phone *</label>
+                                <input type="tel" id="client-phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-email">Client Email *</label>
+                                <input type="email" id="client-email" required>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Invoice Details Tab -->
+                <div class="tab-content" id="invoice-tab">
+                    <section>
+                        <h2>Invoice Details</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="invoice-number">Invoice Number *</label>
+                                <input type="text" id="invoice-number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="invoice-date">Invoice Date *</label>
+                                <input type="date" id="invoice-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="due-date">Due Date *</label>
+                                <input type="date" id="due-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="payment-terms">Payment Terms *</label>
+                                <select id="payment-terms" required>
+                                    <option value="">Select Payment Terms</option>
+                                    <option value="due-receipt">Due upon receipt</option>
+                                    <option value="net-15">Net 15</option>
+                                    <option value="net-30">Net 30</option>
+                                    <option value="net-60">Net 60</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="currency">Currency *</label>
+                                <select id="currency" required>
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="CAD">CAD ($)</option>
+                                    <option value="AUD">AUD ($)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="discount-type">Discount Type</label>
+                                <select id="discount-type">
+                                    <option value="percentage">Percentage</option>
+                                    <option value="fixed">Fixed Amount</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="discount-amount">Discount Amount</label>
+                                <input type="number" id="discount-amount" min="0" step="0.01">
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Items Tab -->
+                <div class="tab-content" id="items-tab">
+                    <section>
+                        <h2>Invoice Items</h2>
+                        <table id="items-table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Item rows will be dynamically added here -->
+                            </tbody>
+                        </table>
+                        <div class="action-buttons">
+                            <button type="button" id="add-item" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Add Item
+                            </button>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Totals Section -->
+                <div id="totals">
+                    <div>
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div>
+                        <span>Tax (<span id="tax-rate" data-rate="0.10">10%</span>):</span>
+                        <span id="tax">$0.00</span>
+                    </div>
+                    <div>
+                        <span>Discount:</span>
+                        <span id="discount">$0.00</span>
+                    </div>
+                    <div>
+                        <span>Total:</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button type="button" id="preview-invoice" class="btn btn-primary">
+                        <i class="fas fa-eye"></i> Preview Invoice
+                    </button>
+                    <button type="button" id="generate-pdf" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="preview-content">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" type="module"></script>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Intelliquinte L.L.C.</h3>
+            </div>
+            <div class="footer-info">
+                <p>©2024 Intelliquinte L.L.C. All Rights Reserved.</p>
+                <p class="footer-links"><a href="https://intelliquinte.com/">Intelliquinte</a> | <a href="mailto:support@intelliquinte.com">Contact Us</a></p>
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a> | 
+                <a href="terms.html">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

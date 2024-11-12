@@ -1,0 +1,773 @@
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --success-color: #059669;
+    --danger-color: #dc2626;
+    --background-color: #f8fafc;
+    --card-background: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --input-background: #f8fafc;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.5;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+#invoice-generator {
+    background-color: var(--card-background);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+h1 {
+    color: var(--text-primary);
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--input-background);
+    border-radius: 0.75rem;
+}
+
+section h2 {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+section h2::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 1.25rem;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+label {
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: var(--card-background);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+/* Items Table Styles */
+#items-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1rem 0;
+}
+
+#items-table th {
+    background: var(--background-color);
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+#items-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.item-row input {
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 0.5rem;
+}
+
+.item-row input:focus {
+    border-color: var(--border-color);
+    background: var(--card-background);
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+#add-item {
+    background: var(--success-color);
+    color: white;
+}
+
+#add-item:hover {
+    background: color-mix(in srgb, var(--success-color) 90%, black);
+}
+
+#preview-invoice {
+    background: var(--primary-color);
+    color: white;
+    flex: 1;
+}
+
+#preview-invoice:hover {
+    background: var(--secondary-color);
+}
+
+#generate-pdf {
+    background: var(--secondary-color);
+    color: white;
+    flex: 1;
+}
+
+#generate-pdf:hover {
+    background: color-mix(in srgb, var(--secondary-color) 90%, black);
+}
+
+.remove-item {
+    background: var(--danger-color);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.remove-item:hover {
+    background: color-mix(in srgb, var(--danger-color) 90%, black);
+}
+
+/* Totals Section */
+#totals {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: var(--input-background);
+    border-radius: 0.75rem;
+}
+
+#totals div {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+}
+
+#totals div:last-child {
+    border-top: 2px solid var(--border-color);
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+    padding: 2rem;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+    margin: 0 auto;
+    max-width: 1000px;
+    position: relative;
+    height: calc(100vh - 4rem);
+    overflow-y: auto;
+    padding: 2rem;
+}
+
+.logo-container {
+    margin-bottom: 1rem;
+}
+
+.company-logo {
+    max-width: 200px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.close-modal {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.preview-content {
+    padding: 1rem;
+}
+
+/* Preview Styles */
+#preview-container {
+    padding: 3rem;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+}
+
+.logo-placeholder {
+    width: 200px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+.invoice-title {
+    text-align: right;
+}
+
+.invoice-title h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.invoice-details {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.invoice-details p {
+    margin: 0.25rem 0;
+}
+
+.business-info,
+.client-info {
+    margin-bottom: 2rem;
+}
+
+.business-info h3,
+.client-info h3 {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.items-table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+}
+
+.items-table-container th {
+    background: var(--background-color);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.items-table-container td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.totals-container {
+    text-align: right;
+    margin: 2rem 0;
+}
+
+.totals-container p {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.totals-container p:last-child {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.notes-container {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.notes-container h3 {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+/* Add these styles to your existing CSS */
+.invalid {
+    border-color: var(--danger-color) !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.error-message {
+    color: var(--danger-color);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.file-preview {
+    position: relative;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+.file-preview img {
+    max-width: 200px;
+    max-height: 100px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.file-preview img[src] {
+    display: block;
+}
+
+.remove-logo {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    z-index: 10;
+    padding: 0;
+}
+
+.remove-logo:hover {
+    background: color-mix(in srgb, var(--danger-color) 90%, black);
+}
+
+.file-preview {
+    display: inline-block;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+#preview-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: black;
+}
+
+.preview-content {
+    font-family: Arial, sans-serif;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.preview-items {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.preview-items th, 
+.preview-items td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.preview-totals {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.preview-notes {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.modern-invoice-preview {
+    font-family: 'Inter', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.logo-container .company-logo {
+    max-width: 150px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.invoice-title h1 {
+    color: #2563eb;
+    margin-bottom: 0.5rem;
+}
+
+.invoice-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.from-section, .to-section, .invoice-meta {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.invoice-items {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.invoice-items th {
+    background: #f8fafc;
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.invoice-items td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.invoice-totals {
+    text-align: right;
+}
+
+.totals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    max-width: 300px;
+    margin-left: auto;
+}
+
+.totals-label {
+    text-align: right;
+    color: #64748b;
+}
+
+.totals-value {
+    text-align: right;
+}
+
+.total-label {
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.total-value {
+    font-weight: bold;
+    color: #2563eb;
+    font-size: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.75rem;
+}
+
+.form-group label {
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Ensure tight spacing */
+.form-group + .form-group {
+    margin-top: 0.5rem;
+}
+
+/* Preview specific logo styles */
+.preview-header .logo-container img {
+    max-width: 200px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.site-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 2rem 0;
+    margin-top: 4rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+.footer-brand h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.footer-info p {
+    color: #6c757d;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+/* If you want the footer to stick to the bottom even with minimal content */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* For better mobile responsiveness */
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 1.5rem 0;
+    }
+    
+    .footer-content {
+        padding: 0 0.5rem;
+    }
+}
+
+/* Legal Pages Styles */
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.legal-content h1 {
+    color: var(--text-primary);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.legal-content section {
+    margin: 2rem 0;
+}
+
+.legal-content h2 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.legal-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.legal-content ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.legal-content li {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+/* Footer Links */
+.footer-links {
+    margin-top: 1rem;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+}
+  
